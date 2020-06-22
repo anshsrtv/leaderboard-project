@@ -5,6 +5,7 @@ class Milestone(models.Model):
     good_start = models.BooleanField(default=False)
     terrific_start = models.BooleanField(default=False)
     almost_there = models.BooleanField(default=False)
+    mission_accomplished = models.BooleanField(default=False)
 
 
 class Leaderboard(models.Model):
