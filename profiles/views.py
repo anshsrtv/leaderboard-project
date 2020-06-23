@@ -24,6 +24,7 @@ def PullRequest(request):
     contribution by any user by any user. This is automatically \
     handled by webhooks in the git repos.
     """
+    print(request.data)
     try:
         action = request.data['action']
         username = request.data['sender']['login'] 
@@ -48,6 +49,17 @@ def PullRequest(request):
                 leaderboard.save()
             elif action == 'closed' and merged:
                 leaderboard.pr_merged +=1
+                if(request.data['labels']['name']=='good first issue'):
+                    leaderboard.good_first_issue = True
+                    if(leaderboard.medium_issues_solved >= 2):
+                        leaderboard.milestone_achieved = True
+                elif(request.data['labels']['name']=='medium'):
+                    leaderboard.medium_issues_solved +=1
+                    if(leaderboard.good_first_issue and medium_issues_solved == 2):
+                        leaderboard.milestone_achieved = True
+                elif(request.data['labels']['name']=='hard'):
+                    leaderboard.hard_issues_solved +=1
+
                 leaderboard.save()
             else: 
                 pass
