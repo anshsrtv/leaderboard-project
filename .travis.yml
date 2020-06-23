@@ -1,0 +1,13 @@
+language: python
+python:
+- '3.7'
+install:
+- pip install -r requirements.txt
+- python manage.py migrate
+env:
+  SECRET_KEY: sample_secret_key
+  ALLOWED_HOSTS: "*"
+  DEBUG: 'True'
+services:
+script:
+- python manage.py test
