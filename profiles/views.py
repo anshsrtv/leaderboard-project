@@ -1,9 +1,10 @@
+import json
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework.test import APIClient
+from urllib.request import urlopen
 from utils.swagger import set_example
 from profiles.models import Leaderboard
 
@@ -49,9 +50,11 @@ def pull_request(request):
                 leaderboard.save()
             elif action == 'closed' and merged:
                 leaderboard.pr_merged += 1
-                client = APIClient()
-                issue_response = client.get(request.data['_links']['issue']['href'])
-                for label in issue_response.data['labels']:
+                issue_response = urlopen(request.data['pull_request']['_links']['issue']['href'])
+                string = issue_response.read().decode('utf-8')
+                issue_response_json_obj = json.loads(string)
+                print(issue_response_json_obj)
+                for label in issue_response_json_obj['labels']:
                     if label == 'good first issue':
                         leaderboard.good_first_issue = True
                         if leaderboard.medium_issues_solved >= 2:
