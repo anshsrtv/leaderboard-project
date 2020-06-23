@@ -1,1 +1,33 @@
-# leaderboard-project
+# Leaderboard Project
+
+
+## Setup and run
+
+1. Create a virtual environment with Python3.7: `virtualenv env -p python3.7`. If you dont have `python3.7` yet then you can install it with:
+    1. linux(ubuntu/debian) - `sudo apt install python3.7`
+    1. windows - Download installer from https://www.python.org/downloads/release/python-370/.
+1. Activate the virutal environment: `source env/bin/activate`
+1. Install all the dependencies in `requirements.txt` file: `pip install -r requirements.txt`
+1. Migrate the migrations: `python manage.py migrate`
+1. [See below for webhooks setup](#webhooks-setup).
+1. Run the app: `python manage.py runserver`
+1. To test the APIs in your local, we can use ngrok [See below for ngrok setup](#ngrok-setup).
+1. Navigate to http://localhost:8000 in your browser
+1. When you are done using the app, deactivate the virtual environment: `deactivate`
+
+
+## Ngrok Setup
+
+1. Install [ngrok](https://ngrok.com/download) 
+1. When you're done installing, you can expose your localhost by running `./ngrok http 8000` .
+1. Copy that funky `*.ngrok.io` URL. That's your server public URL for now.
+
+## Webhooks Setup
+
+We recommend you go through [Webhooks Docs](https://developer.github.com/webhooks/) to be able to use this project effeciently.
+
+1. Select any repo and head over to https://github.com/:owner/:repo/settings/hooks/new
+1. Create a webhook with payload URL (ngrok or real server) with `/pull_request/` appended to it.
+1. Set the content type as `application/json`. No secrets for now.
+1. Select an individual even of pull request. Let the webhook be `Active`.
+1. Also create a new Leaderboard object in the admin panel with the username same as your github username. 
