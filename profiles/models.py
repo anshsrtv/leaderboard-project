@@ -21,5 +21,3 @@ class Leaderboard(models.Model):
         4. mission_accomplished -> good_first_issue = True
                                     medium_issues_solved = 2
     '''
-    
-

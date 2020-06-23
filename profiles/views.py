@@ -1,11 +1,11 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from profiles.models import Leaderboard
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.test import APIClient
 from utils.swagger import set_example
+from profiles.models import Leaderboard
 
 
 @swagger_auto_schema(
@@ -18,7 +18,7 @@ from utils.swagger import set_example
         },
 )
 @api_view(['post'])
-def PullRequest(request):
+def pull_request(request):
     """
     This API is to keep a track of the PR's opened and the \
     contribution by any user by any user. This is automatically \
@@ -27,11 +27,11 @@ def PullRequest(request):
     print(request.data)
     try:
         action = request.data['action']
-        username = request.data['sender']['login'] 
+        username = request.data['sender']['login']
         merged = request.data['pull_request']['merged']
     except:
         return Response(
-            {"detail":"Sorry, there is some issue with the webhooks."}, 
+            {"detail":"Sorry, there is some issue with the webhooks."},
             status=status.HTTP_400_BAD_REQUEST
         )
     else:
@@ -40,28 +40,31 @@ def PullRequest(request):
             leaderboard = Leaderboard.objects.get(username=user)
         except:
             return Response(
-            {"detail":"Cannot retrieve the user."}, 
-            status=status.HTTP_404_NOT_FOUND
-        )
+                {"detail":"Cannot retrieve the user."},
+                status=status.HTTP_404_NOT_FOUND
+            )
         else:
             if action == 'opened':
-                leaderboard.pr_opened +=1
+                leaderboard.pr_opened += 1
                 leaderboard.save()
             elif action == 'closed' and merged:
-                leaderboard.pr_merged +=1
-                if(request.data['labels']['name']=='good first issue'):
-                    leaderboard.good_first_issue = True
-                    if(leaderboard.medium_issues_solved >= 2):
-                        leaderboard.milestone_achieved = True
-                elif(request.data['labels']['name']=='medium'):
-                    leaderboard.medium_issues_solved +=1
-                    if(leaderboard.good_first_issue and medium_issues_solved == 2):
-                        leaderboard.milestone_achieved = True
-                elif(request.data['labels']['name']=='hard'):
-                    leaderboard.hard_issues_solved +=1
+                leaderboard.pr_merged += 1
+                client = APIClient()
+                issue_response = client.get(request.data['_links']['issue']['href'])
+                for label in issue_response.data['labels']:
+                    if label == 'good first issue':
+                        leaderboard.good_first_issue = True
+                        if leaderboard.medium_issues_solved >= 2:
+                            leaderboard.milestone_achieved = True
+                    elif label == 'medium':
+                        leaderboard.medium_issues_solved += 1
+                        if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
+                            leaderboard.milestone_achieved = True
+                    elif label == 'hard':
+                        leaderboard.hard_issues_solved += 1
 
                 leaderboard.save()
-            else: 
+            else:
                 pass
             return Response(
                 {'detail':'Successfully updated leaderboard'},
