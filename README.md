@@ -22,9 +22,15 @@
 1. When you're done installing, you can expose your localhost by running `./ngrok http 8000` .
 1. Copy that funky `*.ngrok.io` URL. That's your server public URL for now.
 
+![Screenshot from 2020-06-23 22-28-50](https://user-images.githubusercontent.com/49693160/85433398-04517c80-b5a2-11ea-81ae-a7db3cef22e7.png)
+
+
 ## Webhooks Setup
 
 We recommend you go through [Webhooks Docs](https://developer.github.com/webhooks/) to be able to use this project effeciently.
+
+![Screenshot from 2020-06-23 22-09-56](https://user-images.githubusercontent.com/49693160/85433388-0287b900-b5a2-11ea-86f3-04d92b8c4d20.png)
+
 
 1. Select any repo and head over to https://github.com/:owner/:repo/settings/hooks/new
 1. Create a webhook with payload URL (ngrok or real server) with `/pull_request/` appended to it.
