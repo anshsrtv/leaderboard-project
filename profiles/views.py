@@ -25,7 +25,6 @@ def pull_request(request):
     contribution by any user by any user. This is automatically \
     handled by webhooks in the git repos.
     """
-    print(request.data)
     try:
         action = request.data['action']
         username = request.data['sender']['login']
@@ -50,21 +49,20 @@ def pull_request(request):
                 leaderboard.save()
             elif action == 'closed' and merged:
                 leaderboard.pr_merged += 1
-                issue_response = urlopen(request.data['pull_request']['_links']['issue']['href'])
-                string = issue_response.read().decode('utf-8')
-                issue_response_json_obj = json.loads(string)
-                print(issue_response_json_obj)
-                for label in issue_response_json_obj['labels']:
-                    if label == 'good first issue':
-                        leaderboard.good_first_issue = True
-                        if leaderboard.medium_issues_solved >= 2:
-                            leaderboard.milestone_achieved = True
-                    elif label == 'medium':
-                        leaderboard.medium_issues_solved += 1
-                        if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
-                            leaderboard.milestone_achieved = True
-                    elif label == 'hard':
-                        leaderboard.hard_issues_solved += 1
+                # issue_response = urlopen(request.data['pull_request']['_links']['issue']['href'])
+                # string = issue_response.read().decode('utf-8')
+                # issue_response_json_obj = json.loads(string)
+                # for label in issue_response_json_obj['labels']:
+                #     if label == 'good first issue':
+                #         leaderboard.good_first_issue = True
+                #         if leaderboard.medium_issues_solved >= 2:
+                #             leaderboard.milestone_achieved = True
+                #     elif label == 'medium':
+                #         leaderboard.medium_issues_solved += 1
+                #         if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
+                #             leaderboard.milestone_achieved = True
+                #     elif label == 'hard':
+                #         leaderboard.hard_issues_solved += 1
 
                 leaderboard.save()
             else:
@@ -76,7 +74,6 @@ def pull_request(request):
 
 @api_view(['post'])
 def issue(request):
-    print(request.data)
     return Response(
                 request.data,
                 status=status.HTTP_200_OK
