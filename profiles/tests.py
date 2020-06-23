@@ -51,12 +51,17 @@ class PullRequestTestCase(APITestCase):
     def test_success_with_valid_pr_opened(self):
         response = self.client.post("/pull_request/", json.dumps(self.pr_opened_valid_payload),
                                 content_type="application/json")
-        self.assertEqual(response.status_code , status.HTTP_200_OK)
+        l_board = Leaderboard.objects.get(username=self.user)
+        self.assertNotEqual(l_board.pr_opened,0)
+        self.assertEqual(l_board.pr_merged,0)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
+    
     def test_success_with_valid_pr_merged(self):
         response = self.client.post("/pull_request/", json.dumps(self.pr_merged_valid_payload),
                                 content_type="application/json")
+        l_board = Leaderboard.objects.get(username=self.user)
+        self.assertNotEqual(l_board.pr_merged,0)
         self.assertEqual(response.status_code , status.HTTP_200_OK)
 
     def test_fail_invalid_user(self):
@@ -69,6 +74,7 @@ class PullRequestTestCase(APITestCase):
                                 content_type="application/json")
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
     
+
     def tearDown(self):
         self.user.delete()
         self.leaderboard.delete()
