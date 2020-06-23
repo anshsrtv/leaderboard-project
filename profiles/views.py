@@ -73,3 +73,11 @@ def pull_request(request):
                 {'detail':'Successfully updated leaderboard'},
                 status=status.HTTP_200_OK
             )
+
+@api_view(['post'])
+def issue(request):
+    print(request.data)
+    return Response(
+                request.data,
+                status=status.HTTP_200_OK
+            )
