@@ -1,5 +1,5 @@
 from drf_yasg.openapi import Response
-from rest_framework import serializers 
+from rest_framework import serializers
 
 
 # It will suffice in some cases (like error message to show the possible errors)
@@ -12,6 +12,6 @@ class PlaceholderSerialiser(serializers.Serializer):
 def set_example(example, description='', schema=PlaceholderSerialiser):
     return Response(
         examples={"application/json": example},
-        description=description, 
+        description=description,
         schema=schema
     )
