@@ -1,12 +1,11 @@
 # Leaderboard Project
 
-
 ## Setup and run
 
 1. Create a virtual environment with Python3.7: `virtualenv env -p python3.7`. If you dont have `python3.7` yet then you can install it with:
     1. linux(ubuntu/debian) - `sudo apt install python3.7`
     1. windows - Download installer from https://www.python.org/downloads/release/python-370/.
-1. Activate the virutal environment: `source env/bin/activate`
+1. Activate the virtual environment: `source env/bin/activate`
 1. Install all the dependencies in `requirements.txt` file: `pip install -r requirements.txt`
 1. Make a copy of `.env.sample` to `.env` and change the values of variables with original values. [Click here ](#example-env-file) for sample .env file.
 1. Migrate the migrations: `python manage.py migrate`
@@ -47,3 +46,19 @@ We recommend you go through [Webhooks Docs](https://developer.github.com/webhook
 1. Select the individual event called "Pull Requests". Let the webhook be `Active`.
 1. Make another similar webhook with payload URL `/issue/` appended to it, and select the event "issues".
 1. Also create a new Leaderboard object in the admin panel or Python shell with the, username same as the github username you are making your PRs with. 
+
+## Other Instructions
+This repository has been created while keeping some good coding practices and situational advantages, and so the following needs to be kept in mind while working with it.
+
+We keep track of merged PRs and total PRs made by each user. For scoring purposes we have divided the issues into three categories. These categories are identified by adding labels to the issues.
+1. Good first issue - These are simpler issues to get you started.
+2. Medium issues - These are mildly challenging and worthwhile.
+3. Hard issues - These are definitely meant to challenge you.
+
+We understand that each contribution is itself of great importance. So we have decided to reward all those participants who solve atleast 2 medium issues and 1 good first issue. This is taken care of by the boolean `milestone_achieved`.
+
+For every issue closed, we increment points. The following needs to be kept in mind in practice.
+1. Every issue is assigned to one user only (This is important for proper points distribution and less confusion in the repository.)
+2. Every issue is solved only by the user assigned to it. The person making the PR must ensure that s/he has been assigned the issue to make sure his/her contribution is counted.
+3. Each issue shall contain only one of the labels described above.
+4. Make sure the user is registered before the PR is made for proper updation, as updation is instant.
