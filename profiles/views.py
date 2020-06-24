@@ -1,10 +1,8 @@
-import json
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from urllib.request import urlopen
 from utils.swagger import set_example
 from profiles.models import Leaderboard
 
@@ -49,21 +47,6 @@ def pull_request(request):
                 leaderboard.save()
             elif action == 'closed' and merged:
                 leaderboard.pr_merged += 1
-                # issue_response = urlopen(request.data['pull_request']['_links']['issue']['href'])
-                # string = issue_response.read().decode('utf-8')
-                # issue_response_json_obj = json.loads(string)
-                # for label in issue_response_json_obj['labels']:
-                #     if label == 'good first issue':
-                #         leaderboard.good_first_issue = True
-                #         if leaderboard.medium_issues_solved >= 2:
-                #             leaderboard.milestone_achieved = True
-                #     elif label == 'medium':
-                #         leaderboard.medium_issues_solved += 1
-                #         if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
-                #             leaderboard.milestone_achieved = True
-                #     elif label == 'hard':
-                #         leaderboard.hard_issues_solved += 1
-
                 leaderboard.save()
             else:
                 pass
@@ -72,9 +55,62 @@ def pull_request(request):
                 status=status.HTTP_200_OK
             )
 
+@swagger_auto_schema(
+        operation_id='update pull requests status',
+        method='post',
+        responses={
+            '200': set_example({'detail':'Successfully updated leaderboard'}),
+            '400': set_example({"detail":"Sorry, there is some issue with the webhooks."}),
+            '404': set_example({"detail":"Cannot retrieve the user."})
+        },
+)
 @api_view(['post'])
 def issue(request):
+    """
+    This API is to keep a track of the issues closed and the \
+    contribution the user assigned to close it. This is \
+    automatically handled by webhooks in the git repository \
+    or repositories being tracked.
+    """
+
+    try:
+        action = request.data["action"]
+        labels = request.data["issue"]["labels"]
+        username = request.data["issue"]["assignee"]["login"]
+    except:
+        return Response(
+            {"detail":"Sorry, there is some issue with the webhooks."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        user = User.objects.get(username=username)
+        leaderboard = Leaderboard.objects.get(username=user)
+    except:
+        return Response(
+            {"detail":"Cannot retrieve the user."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if action == 'closed':
+        for label in labels:
+            if label["name"] == 'good first issue':
+                leaderboard.good_first_issue = True
+                if leaderboard.medium_issues_solved >= 2:
+                    leaderboard.milestone_achieved = True
+                leaderboard.save()
+            elif label["name"] == 'medium':
+                leaderboard.medium_issues_solved += 1
+                if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
+                    leaderboard.milestone_achieved = True
+                leaderboard.save()
+            elif label["name"] == 'hard':
+                leaderboard.hard_issues_solved += 1
+                leaderboard.save()
+            else:
+                pass
+
     return Response(
-                request.data,
+                {'detail':'Successfully updated leaderboard'},
                 status=status.HTTP_200_OK
             )
