@@ -59,6 +59,6 @@ We understand that each contribution is itself of great importance. So we have d
 
 For every issue closed, we increment points. The following needs to be kept in mind in practice.
 1. Every issue is assigned to one user only (This is important for proper points distribution and less confusion in the repository.)
-2. Every issue is solved only by the user assigned to it. The person making the PR must ensure the s/he has been assigned the issue to make sure your contribution is counted.
+2. Every issue is solved only by the user assigned to it. The person making the PR must ensure that s/he has been assigned the issue to make sure his/her contribution is counted.
 3. Each issue shall contain only one of the labels described above.
 4. Make sure the user is registered before the PR is made for proper updation, as updation is instant.
