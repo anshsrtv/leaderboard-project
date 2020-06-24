@@ -104,18 +104,20 @@ def issue(request):
                 leaderboard.points += gfi_points
                 if leaderboard.medium_issues_solved >= 2:
                     leaderboard.milestone_achieved = True
+                leaderboard.save()
             elif label["name"] == 'medium':
                 leaderboard.medium_issues_solved += 1
                 leaderboard.points += medium_issue_points
                 if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
                     leaderboard.milestone_achieved = True
+                leaderboard.save()
             elif label["name"] == 'hard':
                 leaderboard.hard_issues_solved += 1
                 leaderboard.points += hard_issue_points
+                leaderboard.save()
             else:
                 pass
             
-            leaderboard.save()
 
     return Response(
                 {'detail':'Successfully updated leaderboard'},
