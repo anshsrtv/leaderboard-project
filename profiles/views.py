@@ -15,6 +15,8 @@ from profiles.responses import leaderboard_response_example_200
         method='post',
         responses={
             '200': set_example({'detail':'Successfully updated leaderboard'}),
+            '400': set_example({"detail":"Sorry, there is some issue with the webhooks."}),	
+            '404': set_example({"detail":"Cannot retrieve the user."})
         },
 )
 @api_view(['post'])
