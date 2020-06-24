@@ -114,3 +114,29 @@ def issue(request):
                 {'detail':'Successfully updated leaderboard'},
                 status=status.HTTP_200_OK
         )
+
+
+@swagger_auto_schema(
+        operation_id='view leaderboard',
+        method='get',
+        responses={
+            '200': set_example({'detail':'Leaderboard fetched successfully'}),
+            '404': set_example({'detail':'Leaderboard could not be fetched.'})
+        },
+)
+@api_view(['get'])
+def view_leaderboard(request):
+
+    try:
+        # Fetching Leaderboard objects and ranking them.
+        leaderboard_objs = Leaderboard.object.all().order_by('-points')
+    except:
+        return Response(
+            {'detail':'Leaderboard could not be fetched.'},
+            status = status.HTTP_404_NOT_FOUND
+        )
+    else:
+        return Response(
+            leaderboard_objs,
+            status = status.HTTP_200_OK
+        )
