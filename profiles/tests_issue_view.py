@@ -126,7 +126,7 @@ class IssueTestCase(APITestCase):
 
         #Check values
         l_board = Leaderboard.objects.get(username=self.user)
-        self.assertNotEqual(l_board.medium_issues_solved, 0)
+        self.assertGreaterEqual(l_board.medium_issues_solved, 2)
         self.assertNotEqual(l_board.good_first_issue, False)
         self.assertNotEqual(l_board.milestone_achieved, False)
 

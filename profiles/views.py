@@ -56,7 +56,7 @@ def pull_request(request):
             )
 
 @swagger_auto_schema(
-        operation_id='update pull requests status',
+        operation_id='update issue and milestone status',
         method='post',
         responses={
             '200': set_example({'detail':'Successfully updated leaderboard'}),
@@ -68,15 +68,15 @@ def pull_request(request):
 def issue(request):
     """
     This API is to keep a track of the issues closed and the \
-    contribution the user assigned to close it. This is \
+    contribution of the user assigned to close it. This is \
     automatically handled by webhooks in the git repository \
     or repositories being tracked.
     """
 
     try:
-        action = request.data["action"] #Receives action done upon the issue
-        labels = request.data["issue"]["labels"] #Receives a list of labels of the issue
-        username = request.data["issue"]["assignee"]["login"] #Receives username of assigned user
+        action = request.data["action"]
+        labels = request.data["issue"]["labels"]
+        assignee = request.data["issue"]["assignee"]
     except:
         return Response(
             {"detail":"Sorry, there is some issue with the webhooks."},
@@ -85,7 +85,7 @@ def issue(request):
 
     try:
         #Getting leaderboard object of the user
-        user = User.objects.get(username=username)
+        user = User.objects.get(username=assignee['login'])
         leaderboard = Leaderboard.objects.get(username=user)
     except:
         return Response(
