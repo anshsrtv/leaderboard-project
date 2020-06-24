@@ -50,7 +50,7 @@ We recommend you go through [Webhooks Docs](https://developer.github.com/webhook
 ## Other Instructions
 This repository has been created while keeping some good coding practices and situational advantages, and so the following needs to be kept in mind while working with it.
 
-We keep track of merged PRs and total PRs made by each user. For scoring purposes we have divided the issues into three categories. These categories are identifies by adding labels to the issues.
+We keep track of merged PRs and total PRs made by each user. For scoring purposes we have divided the issues into three categories. These categories are identified by adding labels to the issues.
 1. Good first issue - These are simpler issues to get you started.
 2. Medium issues - These are mildly challenging and worthwhile.
 3. Hard issues - These are definitely meant to challenge you.
