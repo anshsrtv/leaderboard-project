@@ -55,7 +55,7 @@ We keep track of merged PRs and total PRs made by each user. For scoring purpose
 2. Medium issues - These are mildly challenging and worthwhile.
 3. Hard issues - These are definitely meant to challenge you.
 
-We understand that the contributing is itself of great importance. So we have decide to keep reward of all participants that solve atleast 2 medium issues and 1 good first issue. Those are tracked by `milestone_achieved`.
+We understand that each contribution is itself of great importance. So we have decided to reward all those participants who solve atleast 2 medium issues and 1 good first issue. This is taken care of by the boolean `milestone_achieved`.
 
 For every issue closed, we increment points. The following needs to be kept in mind in practice.
 1. Every issue is assigned to one user only (This is important for proper points distribution and less confusion in the repository.)
