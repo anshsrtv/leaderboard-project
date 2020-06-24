@@ -10,6 +10,8 @@ class PullRequestTestCase(APITestCase):
     from profiles.views.py
     '''
 
+    # Creating webhooks like payloads to test the views.
+
     pr_merged_valid_payload = {
         'action':'closed',
         'sender':{
@@ -42,6 +44,8 @@ class PullRequestTestCase(APITestCase):
     invalid_payload = {}
 
     def setUp(self):
+
+        # Creating a test user and the corresponding leaderboard.
         self.user = User.objects.create_user(
             email='test_user@gmail.com',
             username='testuser',

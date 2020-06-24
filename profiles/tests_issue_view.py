@@ -11,6 +11,8 @@ class IssueTestCase(APITestCase):
     from profiles.views.py
     '''
 
+    # Creating webhooks like payloads to test the views.
+
     good_first_issue_valid_payload = {
         'action':'closed',
         'issue':{
@@ -69,6 +71,7 @@ class IssueTestCase(APITestCase):
     invalid_payload = {}
 
     def setUp(self):
+        # Creating a test user and the corresponding leaderboard.
         self.user = User.objects.create_user(
             email='test_user@gmail.com',
             username='testuser',
@@ -86,6 +89,7 @@ class IssueTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_success_with_solve_good_first_issue(self):
+        # To check increment in points, we have prev_l_board and update_l_board.
         prev_l_board = Leaderboard.objects.get(username=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.good_first_issue_valid_payload),
@@ -98,6 +102,7 @@ class IssueTestCase(APITestCase):
         self.assertNotEqual(prev_l_board.points, updated_l_board.points)
 
     def test_success_with_solve_medium_issue(self):
+        # To check increment in points, we have prev_l_board and update_l_board.
         prev_l_board = Leaderboard.objects.get(username=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
@@ -111,6 +116,7 @@ class IssueTestCase(APITestCase):
 
 
     def test_success_with_solve_hard_issue(self):
+        # To check increment in points, we have prev_l_board and update_l_board.
         prev_l_board = Leaderboard.objects.get(username=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.hard_issue_valid_payload),
@@ -126,6 +132,7 @@ class IssueTestCase(APITestCase):
         '''The milestone is said to be achieved when one good first issue and two
         medium issues are solved. This tests checks the success in updation of the
         milestone_achieved field.'''
+        # To check increment in points, we have prev_l_board and update_l_board.
         prev_l_board = Leaderboard.objects.get(username=self.user)
 
         #Solving one good first and two medium issues.
