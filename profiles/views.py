@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from utils.swagger import set_example
 from profiles.models import Leaderboard
+from decouple import config
 
 
 @swagger_auto_schema(
@@ -56,7 +57,7 @@ def pull_request(request):
             )
 
 @swagger_auto_schema(
-        operation_id='update pull requests status',
+        operation_id='update issue and milestone status',
         method='post',
         responses={
             '200': set_example({'detail':'Successfully updated leaderboard'}),
@@ -68,15 +69,19 @@ def pull_request(request):
 def issue(request):
     """
     This API is to keep a track of the issues closed and the \
-    contribution the user assigned to close it. This is \
+    contribution of the user assigned to close it. This is \
     automatically handled by webhooks in the git repository \
     or repositories being tracked.
     """
 
+    gfi_points = int(config('GOOD_FIRST_ISSUE_POINTS'))
+    medium_issue_points = int(config('MEDIUM_ISSUE_POINTS'))
+    hard_issue_points = int(config('HARD_ISSUE_POINTS'))
+
     try:
         action = request.data["action"] #Receives action done upon the issue
         labels = request.data["issue"]["labels"] #Receives a list of labels of the issue
-        username = request.data["issue"]["assignee"]["login"] #Receives username of assigned user
+        assignee = request.data["issue"]["assignee"] #Receives username of assigned user
     except:
         return Response(
             {"detail":"Sorry, there is some issue with the webhooks."},
@@ -85,7 +90,7 @@ def issue(request):
 
     try:
         #Getting leaderboard object of the user
-        user = User.objects.get(username=username)
+        user = User.objects.get(username=assignee['login'])
         leaderboard = Leaderboard.objects.get(username=user)
     except:
         return Response(
@@ -97,23 +102,30 @@ def issue(request):
         '''Take note that we assume issue to be closed only when a PR
         has fixed it. If not, make sure that nobody is assigned so that
         no wrong person gets points.'''
-        for label in labels: 
+        for label in labels:
             '''looking for desired labels from the list of labels to change
             the leaderboard fields as done below'''
             if label["name"] == 'good first issue':
                 leaderboard.good_first_issue = True
+                leaderboard.points += gfi_points #Update points
                 if leaderboard.medium_issues_solved >= 2: #Milestone check
                     leaderboard.milestone_achieved = True
-                leaderboard.save()
+                leaderboard.save() #Save changes
+
             elif label["name"] == 'medium':
                 leaderboard.medium_issues_solved += 1
+                leaderboard.points += medium_issue_points #Update points
+
                 #Milestone check
                 if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
                     leaderboard.milestone_achieved = True
-                leaderboard.save()
+
+                leaderboard.save() #Save changes
+
             elif label["name"] == 'hard':
                 leaderboard.hard_issues_solved += 1
-                leaderboard.save()
+                leaderboard.points += hard_issue_points #Update points
+                leaderboard.save() #Save changes
             else:
                 pass  #Search in rest labels
 

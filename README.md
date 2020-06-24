@@ -8,6 +8,7 @@
     1. windows - Download installer from https://www.python.org/downloads/release/python-370/.
 1. Activate the virutal environment: `source env/bin/activate`
 1. Install all the dependencies in `requirements.txt` file: `pip install -r requirements.txt`
+1. Make a copy of `.env.sample` to `.env` and change the values of variables with original values. [Click here ](#example-env-file) for sample .env file.
 1. Migrate the migrations: `python manage.py migrate`
 1. [See below for webhooks setup](#webhooks-setup).
 1. Run the app: `python manage.py runserver`
@@ -15,6 +16,14 @@
 1. Navigate to http://localhost:8000/docs/ for the swagger UI documentation in your browser.
 1. When you are done using the app, deactivate the virtual environment: `deactivate`
 
+## Example env file  
+
+```
+SECRET_KEY='w0fcvcq02wh!yqiewq7)n^b7med(xop6h^@-_3j01*m0m)nz1)'
+GOOD_FIRST_ISSUE_POINTS = 10
+MEDIUM_ISSUE_POINTS = 20
+HARD_ISSUE_POINTS = 40
+```
 
 ## Ngrok Setup
 
@@ -35,6 +44,6 @@ We recommend you go through [Webhooks Docs](https://developer.github.com/webhook
 1. Select any repo and head over to https://github.com/:owner/:repo/settings/hooks/new
 1. Create a webhook with payload URL (ngrok or real server) with `/pull_request/` appended to it.
 1. Set the content type as `application/json`. No secrets for now.
-1. Select the individual event called "pull request". Let the webhook be `Active`.
-1. Make another similar webhook with `/issue/` appended to it, and select the event "issue".
+1. Select the individual event called "Pull Requests". Let the webhook be `Active`.
+1. Make another similar webhook with payload URL `/issue/` appended to it, and select the event "issues".
 1. Also create a new Leaderboard object in the admin panel or Python shell with the, username same as the github username you are making your PRs with. 
