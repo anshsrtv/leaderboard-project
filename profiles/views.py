@@ -68,7 +68,7 @@ def pull_request(request):
 def issue(request):
     """
     This API is to keep a track of the issues closed and the \
-    contribution the user assigned to close it. This is \
+    contribution of the user assigned to close it. This is \
     automatically handled by webhooks in the git repository \
     or repositories being tracked.
     """
