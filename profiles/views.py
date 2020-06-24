@@ -76,7 +76,7 @@ def issue(request):
     try:
         action = request.data["action"]
         labels = request.data["issue"]["labels"]
-        username = request.data["issue"]["assignee"]["login"]
+        assignee = request.data["issue"]["assignee"]
     except:
         return Response(
             {"detail":"Sorry, there is some issue with the webhooks."},
