@@ -56,7 +56,7 @@ def pull_request(request):
             )
 
 @swagger_auto_schema(
-        operation_id='update pull requests status',
+        operation_id='update issue and milestone status',
         method='post',
         responses={
             '200': set_example({'detail':'Successfully updated leaderboard'}),
