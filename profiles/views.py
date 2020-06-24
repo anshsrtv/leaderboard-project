@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from utils.swagger import set_example
 from profiles.models import Leaderboard
+from decouple import config
 
 
 @swagger_auto_schema(
@@ -73,6 +74,10 @@ def issue(request):
     or repositories being tracked.
     """
 
+    gfi_points = int(config('GOOD_FIRST_ISSUE_POINTS'))
+    medium_issue_points = int(config('MEDIUM_ISSUE_POINTS'))
+    hard_issue_points = int(config('HARD_ISSUE_POINTS'))
+
     try:
         action = request.data["action"]
         labels = request.data["issue"]["labels"]
@@ -96,19 +101,23 @@ def issue(request):
         for label in labels:
             if label["name"] == 'good first issue':
                 leaderboard.good_first_issue = True
+                leaderboard.points += gfi_points
                 if leaderboard.medium_issues_solved >= 2:
                     leaderboard.milestone_achieved = True
                 leaderboard.save()
             elif label["name"] == 'medium':
                 leaderboard.medium_issues_solved += 1
+                leaderboard.points += medium_issue_points
                 if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
                     leaderboard.milestone_achieved = True
                 leaderboard.save()
             elif label["name"] == 'hard':
                 leaderboard.hard_issues_solved += 1
+                leaderboard.points += hard_issue_points
                 leaderboard.save()
             else:
                 pass
+            
 
     return Response(
                 {'detail':'Successfully updated leaderboard'},
