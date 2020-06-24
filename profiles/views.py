@@ -182,6 +182,6 @@ def list_leaderboard(request):
         response_obj.append(details)
 
     return Response(
-                response_obj,#leaderboard_obj,
+                response_obj,
                 status=status.HTTP_200_OK
     )
