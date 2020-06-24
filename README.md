@@ -35,5 +35,5 @@ We recommend you go through [Webhooks Docs](https://developer.github.com/webhook
 1. Select any repo and head over to https://github.com/:owner/:repo/settings/hooks/new
 1. Create a webhook with payload URL (ngrok or real server) with `/pull_request/` appended to it.
 1. Set the content type as `application/json`. No secrets for now.
-1. Select an individual even of pull request. Let the webhook be `Active`.
+1. Select the individual event called pull request. Let the webhook be `Active`.
 1. Also create a new Leaderboard object in the admin panel with the username same as your github username. 
