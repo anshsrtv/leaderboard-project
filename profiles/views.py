@@ -84,7 +84,7 @@ def issue(request):
         )
 
     try:
-        user = User.objects.get(username=username)
+        user = User.objects.get(username=assignee['login'])
         leaderboard = Leaderboard.objects.get(username=user)
     except:
         return Response(
