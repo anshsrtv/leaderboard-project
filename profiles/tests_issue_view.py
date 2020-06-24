@@ -79,7 +79,7 @@ class IssueTestCase(APITestCase):
         )
 
         self.leaderboard = Leaderboard.objects.create(
-            username=self.user
+            user=self.user
         )
 
     def test_fail_invalid_payload(self):
@@ -90,40 +90,40 @@ class IssueTestCase(APITestCase):
 
     def test_success_with_solve_good_first_issue(self):
         # To check increment in points, we have prev_l_board and update_l_board.
-        prev_l_board = Leaderboard.objects.get(username=self.user)
+        prev_l_board = Leaderboard.objects.get(user=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.good_first_issue_valid_payload),
                                     content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #Check values
-        updated_l_board = Leaderboard.objects.get(username=self.user)
+        updated_l_board = Leaderboard.objects.get(user=self.user)
         self.assertNotEqual(updated_l_board.good_first_issue, False)
         self.assertNotEqual(prev_l_board.points, updated_l_board.points)
 
     def test_success_with_solve_medium_issue(self):
         # To check increment in points, we have prev_l_board and update_l_board.
-        prev_l_board = Leaderboard.objects.get(username=self.user)
+        prev_l_board = Leaderboard.objects.get(user=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
                                     content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #Check values
-        updated_l_board = Leaderboard.objects.get(username=self.user)
+        updated_l_board = Leaderboard.objects.get(user=self.user)
         self.assertNotEqual(updated_l_board.medium_issues_solved, 0)
         self.assertNotEqual(prev_l_board.points, updated_l_board.points)
 
 
     def test_success_with_solve_hard_issue(self):
         # To check increment in points, we have prev_l_board and update_l_board.
-        prev_l_board = Leaderboard.objects.get(username=self.user)
+        prev_l_board = Leaderboard.objects.get(user=self.user)
 
         response = self.client.post("/issue/", json.dumps(self.hard_issue_valid_payload),
                                     content_type="application/json")
 
         #Check values
-        updated_l_board = Leaderboard.objects.get(username=self.user)
+        updated_l_board = Leaderboard.objects.get(user=self.user)
         self.assertNotEqual(updated_l_board.hard_issues_solved, 0)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotEqual(prev_l_board.points, updated_l_board.points)
@@ -133,7 +133,7 @@ class IssueTestCase(APITestCase):
         medium issues are solved. This tests checks the success in updation of the
         milestone_achieved field.'''
         # To check increment in points, we have prev_l_board and update_l_board.
-        prev_l_board = Leaderboard.objects.get(username=self.user)
+        prev_l_board = Leaderboard.objects.get(user=self.user)
 
         #Solving one good first and two medium issues.
         response = self.client.post("/issue/", json.dumps(self.good_first_issue_valid_payload),
@@ -146,7 +146,7 @@ class IssueTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #Check values
-        updated_l_board = Leaderboard.objects.get(username=self.user)
+        updated_l_board = Leaderboard.objects.get(user=self.user)
         self.assertGreaterEqual(updated_l_board.medium_issues_solved, 2)
         self.assertNotEqual(updated_l_board.good_first_issue, False)
         self.assertNotEqual(updated_l_board.milestone_achieved, False)

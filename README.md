@@ -45,7 +45,7 @@ We recommend you go through [Webhooks Docs](https://developer.github.com/webhook
 1. Set the content type as `application/json`. No secrets for now.
 1. Select the individual event called "Pull Requests". Let the webhook be `Active`.
 1. Make another similar webhook with payload URL `/issue/` appended to it, and select the event "issues".
-1. Also create a new Leaderboard object in the admin panel or Python shell with the, username same as the github username you are making your PRs with. 
+1. Also create a new Leaderboard object in the admin panel or Python shell with the user same as the github username you are making your PRs with. 
 
 ## Other Instructions
 This repository has been created while keeping some good coding practices and situational advantages, and so the following needs to be kept in mind while working with it.

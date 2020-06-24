@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Leaderboard(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     good_first_issue = models.BooleanField(default=False) #Shall be true on completion of Good first issue
     milestone_achieved = models.BooleanField(default=False) #Shall be true on achieving milestone of 2 medium and 1 good first issue
@@ -21,3 +21,5 @@ class Leaderboard(models.Model):
         4. mission_accomplished -> good_first_issue = True
                                     medium_issues_solved = 2
     '''
+    def __str__(self):
+        return self.user.username

@@ -6,6 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from utils.swagger import set_example
 from profiles.models import Leaderboard
 from decouple import config
+from .serializers import LeaderboardSerializer
 
 
 @swagger_auto_schema(
@@ -39,7 +40,7 @@ def pull_request(request):
         try:
             # Fetching the leaderboard object of the contributor.
             user = User.objects.get(username=username)
-            leaderboard = Leaderboard.objects.get(username=user)
+            leaderboard = Leaderboard.objects.get(user=user)
 
         except:
             return Response(
@@ -99,7 +100,7 @@ def issue(request):
     try:
         # Getting leaderboard object of the contributor.
         user = User.objects.get(username=assignee['login'])
-        leaderboard = Leaderboard.objects.get(username=user)
+        leaderboard = Leaderboard.objects.get(user=user)
 
     except:
         return Response(
@@ -152,27 +153,51 @@ def issue(request):
         )
 
 
+
+sample_response_200_leaderboard = [
+  {
+    "user": {
+      "first_name": "Ansh",
+      "last_name": "Srivastava",
+      "username": "anshsrtv",
+      "email": "ansh_srtv@outlook.com"
+    },
+    "points": 70,
+    "good_first_issue": True,
+    "milestone_achieved": False,
+    "medium_issues_solved": 1,
+    "hard_issues_solved": 1,
+    "pr_opened": 3,
+    "pr_merged": 2
+  },
+]
+
 @swagger_auto_schema(
         operation_id='view leaderboard',
         method='get',
         responses={
-            '200': set_example({'detail':'Leaderboard fetched successfully'}),
+            '200': set_example(sample_response_200_leaderboard),
             '404': set_example({'detail':'Leaderboard could not be fetched.'})
         },
 )
 @api_view(['get'])
 def view_leaderboard(request):
+    '''
+    The API returns the list of contributors with their points etc.\
+    in the descending order of their points.
+    ''' 
+    # List of leaderboard objects.
+    response_data = []
+    
+    # Fetching Leaderboard objects and ranking them.
+    leaderboard_objs = Leaderboard.objects.all().order_by('-points')
 
-    try:
-        # Fetching Leaderboard objects and ranking them.
-        leaderboard_objs = Leaderboard.object.all().order_by('-points')
-    except:
-        return Response(
-            {'detail':'Leaderboard could not be fetched.'},
-            status = status.HTTP_404_NOT_FOUND
-        )
-    else:
-        return Response(
-            leaderboard_objs,
-            status = status.HTTP_200_OK
-        )
+    # Serializing each object and adding in response.
+    for l_board in leaderboard_objs:
+        serializer = LeaderboardSerializer(l_board)
+        response_data.append(serializer.data)
+    
+    return Response(
+        response_data,
+        status = status.HTTP_200_OK
+    )

@@ -53,7 +53,7 @@ class PullRequestTestCase(APITestCase):
         )
 
         self.leaderboard = Leaderboard.objects.create(
-            username=self.user
+            user=self.user
         )
 
     def test_success_with_valid_pr_opened(self):
@@ -63,7 +63,7 @@ class PullRequestTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #Check values
-        l_board = Leaderboard.objects.get(username=self.user)
+        l_board = Leaderboard.objects.get(user=self.user)
         self.assertNotEqual(l_board.pr_opened, 0)
         self.assertEqual(l_board.pr_merged, 0)
 
@@ -74,7 +74,7 @@ class PullRequestTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         #Check values
-        l_board = Leaderboard.objects.get(username=self.user)
+        l_board = Leaderboard.objects.get(user=self.user)
         self.assertNotEqual(l_board.pr_merged, 0)
 
     def test_fail_invalid_user(self):
