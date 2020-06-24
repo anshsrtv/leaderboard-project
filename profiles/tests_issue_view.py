@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from profiles.models import Leaderboard
 
 
-class PullRequestTestCase(APITestCase):
+class IssueTestCase(APITestCase):
     '''
     This class is to test the issue view
     from profiles.views.py
