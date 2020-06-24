@@ -113,7 +113,7 @@ class IssueTestCase(APITestCase):
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
                                     content_type="application/json")
         l_board = Leaderboard.objects.get(username=self.user)
-        self.assertNotEqual(l_board.medium_issues_solved, 0)
+        self.assertGreaterEqual(l_board.medium_issues_solved, 2)
         self.assertNotEqual(l_board.good_first_issue, False)
         self.assertNotEqual(l_board.milestone_achieved, False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
