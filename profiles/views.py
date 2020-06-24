@@ -74,9 +74,9 @@ def issue(request):
     """
 
     try:
-        action = request.data["action"]
-        labels = request.data["issue"]["labels"]
-        username = request.data["issue"]["assignee"]["login"]
+        action = request.data["action"] #Receives action done upon the issue
+        labels = request.data["issue"]["labels"] #Receives a list of labels of the issue
+        username = request.data["issue"]["assignee"]["login"] #Receives username of assigned user
     except:
         return Response(
             {"detail":"Sorry, there is some issue with the webhooks."},
@@ -84,6 +84,7 @@ def issue(request):
         )
 
     try:
+        #Getting leaderboard object of the user
         user = User.objects.get(username=username)
         leaderboard = Leaderboard.objects.get(username=user)
     except:
@@ -92,15 +93,21 @@ def issue(request):
             status=status.HTTP_404_NOT_FOUND
         )
 
-    if action == 'closed':
-        for label in labels:
+    if action == 'closed': #if the issue has been closed.
+        '''Take note that we assume issue to be closed only when a PR
+        has fixed it. If not, make sure that nobody is assigned so that
+        no wrong person gets points.'''
+        for label in labels: 
+            '''looking for desired labels from the list of labels to change
+            the leaderboard fields as done below'''
             if label["name"] == 'good first issue':
                 leaderboard.good_first_issue = True
-                if leaderboard.medium_issues_solved >= 2:
+                if leaderboard.medium_issues_solved >= 2: #Milestone check
                     leaderboard.milestone_achieved = True
                 leaderboard.save()
             elif label["name"] == 'medium':
                 leaderboard.medium_issues_solved += 1
+                #Milestone check
                 if(leaderboard.good_first_issue and leaderboard.medium_issues_solved == 2):
                     leaderboard.milestone_achieved = True
                 leaderboard.save()
@@ -108,7 +115,7 @@ def issue(request):
                 leaderboard.hard_issues_solved += 1
                 leaderboard.save()
             else:
-                pass
+                pass  #Search in rest labels
 
     return Response(
                 {'detail':'Successfully updated leaderboard'},

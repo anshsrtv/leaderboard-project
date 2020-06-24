@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from profiles.models import Leaderboard
 
 
-class PullRequestTestCase(APITestCase):
+class IssueTestCase(APITestCase):
     '''
     This class is to test the issue view
     from profiles.views.py
@@ -82,41 +82,54 @@ class PullRequestTestCase(APITestCase):
     def test_fail_invalid_payload(self):
         response = self.client.post("/issue/", json.dumps(self.invalid_payload),
                                     content_type="application/json")
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_success_with_solve_good_first_issue(self):
         response = self.client.post("/issue/", json.dumps(self.good_first_issue_valid_payload),
                                     content_type="application/json")
+
         l_board = Leaderboard.objects.get(username=self.user)
-        self.assertNotEqual(l_board.good_first_issue, False)
+        self.assertNotEqual(l_board.good_first_issue, False) #Check value
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_success_with_solve_medium_issue(self):
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
                                     content_type="application/json")
+
         l_board = Leaderboard.objects.get(username=self.user)
-        self.assertNotEqual(l_board.medium_issues_solved, 0)
+        self.assertNotEqual(l_board.medium_issues_solved, 0) #Check value
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_success_with_solve_hard_issue(self):
         response = self.client.post("/issue/", json.dumps(self.hard_issue_valid_payload),
                                     content_type="application/json")
+
         l_board = Leaderboard.objects.get(username=self.user)
-        self.assertNotEqual(l_board.hard_issues_solved, 0)
+        self.assertNotEqual(l_board.hard_issues_solved, 0) #Check value
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_success_with_milestone_achieved(self):
+        '''A milestone is said to be achieved on solving 1 good first issue and
+        2 medium issues.'''
         response = self.client.post("/issue/", json.dumps(self.good_first_issue_valid_payload),
                                     content_type="application/json")
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
                                     content_type="application/json")
         response = self.client.post("/issue/", json.dumps(self.medium_issue_valid_payload),
                                     content_type="application/json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        #Check values
         l_board = Leaderboard.objects.get(username=self.user)
         self.assertNotEqual(l_board.medium_issues_solved, 0)
         self.assertNotEqual(l_board.good_first_issue, False)
         self.assertNotEqual(l_board.milestone_achieved, False)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
     def test_fail_invalid_user(self):
         response = self.client.post("/issue/", json.dumps(self.hard_issue_invalid_user),
