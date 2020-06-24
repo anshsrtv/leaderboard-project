@@ -113,4 +113,4 @@ def issue(request):
     return Response(
                 {'detail':'Successfully updated leaderboard'},
                 status=status.HTTP_200_OK
-            )
+        )
