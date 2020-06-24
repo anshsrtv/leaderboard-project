@@ -79,9 +79,15 @@ def issue(request):
     hard_issue_points = int(config('HARD_ISSUE_POINTS'))
 
     try:
+<<<<<<< HEAD
         action = request.data["action"] #Receives action done upon the issue
         labels = request.data["issue"]["labels"] #Receives a list of labels of the issue
         assignee = request.data["issue"]["assignee"] #Receives username of assigned user
+=======
+        action = request.data["action"]
+        labels = request.data["issue"]["labels"]
+        assignee = request.data["issue"]["assignee"]
+>>>>>>> b76969bc5ec5ee3fb33baebef838f7b70eeaf3b8
     except:
         return Response(
             {"detail":"Sorry, there is some issue with the webhooks."},
