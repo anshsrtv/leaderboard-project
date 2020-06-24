@@ -162,7 +162,7 @@ def issue(request):
 )
 @api_view(['get'])
 def list_leaderboard(request):
-    '''This view lists all contributors along with their
+    '''This view lists all contributors along with their \
     respective details in descending order along with ranks'''
 
     leaderboard_obj = Leaderboard.objects.order_by('-points')
