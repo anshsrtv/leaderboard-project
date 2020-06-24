@@ -8,6 +8,9 @@ env:
   SECRET_KEY: sample_secret_key
   ALLOWED_HOSTS: "*"
   DEBUG: 'True'
+  GOOD_FIRST_ISSUE_POINTS: 10
+  MEDIUM_ISSUE_POINTS: 20
+  HARD_ISSUE_POINTS: 40
 services:
 script:
 - python manage.py test
