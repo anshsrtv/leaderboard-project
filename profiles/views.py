@@ -3,9 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
+from decouple import config
 from utils.swagger import set_example
 from profiles.models import Leaderboard
-from decouple import config
+from profiles.responses import leaderboard_response_example_200
+
 
 
 @swagger_auto_schema(
@@ -13,7 +15,7 @@ from decouple import config
         method='post',
         responses={
             '200': set_example({'detail':'Successfully updated leaderboard'}),
-            '400': set_example({"detail":"Sorry, there is some issue with the webhooks."}),
+            '400': set_example({"detail":"Sorry, there is some issue with the webhooks."}),	
             '404': set_example({"detail":"Cannot retrieve the user."})
         },
 )
@@ -132,7 +134,7 @@ def issue(request):
 
                 #Milestone check
                 if(
-                    leaderboard.good_first_issue and 
+                    leaderboard.good_first_issue and
                     leaderboard.medium_issues_solved >= 2
                 ):
                     leaderboard.milestone_achieved = True
@@ -150,3 +152,38 @@ def issue(request):
                 {'detail':'Successfully updated leaderboard'},
                 status=status.HTTP_200_OK
         )
+
+@swagger_auto_schema(
+        operation_id='get leaderboard',
+        method='get',
+        responses={
+            '200': set_example(leaderboard_response_example_200),
+        },
+)
+@api_view(['get'])
+def list_leaderboard(request):
+    '''This view lists all contributors along with their \
+    respective details in descending order along with ranks'''
+
+    leaderboard_obj = Leaderboard.objects.order_by('-points')
+    response_obj = []
+    ctr = 1
+    for obj in leaderboard_obj:
+        details = {
+            'rank' : ctr,
+            'username' : obj.username.username,
+            'points' : obj.points,
+            'pr_opened' : obj.pr_opened,
+            'pr_merged' : obj.pr_merged,
+            'good_first_issue' : obj.good_first_issue,
+            'milestone_achieved' : obj.milestone_achieved,
+            'medium_issues_solved' : obj.medium_issues_solved,
+            'hard_issues_solved' : obj.hard_issues_solved
+        }
+        ctr = ctr + 1
+        response_obj.append(details)
+
+    return Response(
+                response_obj,
+                status=status.HTTP_200_OK
+    )
