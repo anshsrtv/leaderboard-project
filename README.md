@@ -1,4 +1,5 @@
 # Leaderboard Project
+Project Swagger Documentation: http://159.65.158.103:8000/docs/
 
 ## Setup and run
 
@@ -12,7 +13,7 @@
 1. [See below for webhooks setup](#webhooks-setup).
 1. Run the app: `python manage.py runserver`
 1. To test the APIs in your local, we can use ngrok [See below for ngrok setup](#ngrok-setup).
-1. Navigate to http://localhost:8000/docs/ for the swagger UI documentation in your browser.
+1. Navigate to http://localhost:8000/docs/  for the swagger UI documentation in your browser.
 1. When you are done using the app, deactivate the virtual environment: `deactivate`
 
 ## Example env file  
