@@ -52,7 +52,7 @@ class PullRequestTestCase(APITestCase):
             password='test_password',
         )
 
-        self.leaderboard = Leaderboard.objects.create(
+        self.leaderboard = Leaderboard.objects.get(
             username=self.user
         )
 
