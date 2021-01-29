@@ -24,8 +24,7 @@ urlpatterns = [
     path('issue/', issue),
     path('docs/', schema_view.with_ui('swagger',cache_timeout=0), name = 'schema-swagger-ui'),
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.logout_then_login, name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('leaderboard/', list_leaderboard, name='view_leaderboard')
 ]
