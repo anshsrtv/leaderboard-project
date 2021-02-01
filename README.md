@@ -23,6 +23,8 @@ SECRET_KEY='w0fcvcq02wh!yqiewq7)n^b7med(xop6h^@-_3j01*m0m)nz1)'
 GOOD_FIRST_ISSUE_POINTS = 10
 MEDIUM_ISSUE_POINTS = 20
 HARD_ISSUE_POINTS = 40
+OAUTH_CLIENT_ID = 'oauth_client_id'
+OAUTH_CLIENT_SECRET_KEY = 'oauth_secret_key'
 ```
 
 ## Ngrok Setup
