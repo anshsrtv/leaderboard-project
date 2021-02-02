@@ -25,7 +25,7 @@ class LeaderboardListTestCase(APITestCase):
                 password='test_password'+str(i),
             )
             self.users.append(user)
-            leaderboard_obj = Leaderboard.objects.create(
+            leaderboard_obj = Leaderboard.objects.get(
                 username=user
             )
             self.leaderboards.append(leaderboard_obj)

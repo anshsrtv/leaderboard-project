@@ -11,6 +11,8 @@ env:
   GOOD_FIRST_ISSUE_POINTS: 10
   MEDIUM_ISSUE_POINTS: 20
   HARD_ISSUE_POINTS: 40
+  OAUTH_CLIENT_ID: 'oauth_client_id'
+  OAUTH_CLIENT_SECRET_KEY: 'oauth_secret_key'
 services:
 script:
 - python manage.py test
