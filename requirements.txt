@@ -8,6 +8,7 @@ coreschema==0.0.4
 cryptography==3.2
 defusedxml==0.7.0rc1
 Django==3.0.7
+django-cors-headers==3.7.0
 django-filter==2.3.0
 djangorestframework==3.11.0
 drf-yasg==1.17.1
