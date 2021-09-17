@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -156,3 +157,6 @@ LOGIN_REDIRECT_URL = 'view_leaderboard'
 LOGOUT_REDIRECT_URL = 'view_leaderboard'
 SOCIAL_AUTH_GITHUB_KEY = config('OAUTH_CLIENT_ID')
 SOCIAL_AUTH_GITHUB_SECRET = config('OAUTH_CLIENT_SECRET_KEY')
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
