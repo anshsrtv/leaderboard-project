@@ -1,5 +1,5 @@
 # Leaderboard Project
-Project Swagger Documentation: http://159.65.158.103:8000/docs/
+Project Swagger Documentation: https://leaderboard-project.herokuapp.com/docs/
 
 ## Setup and run
 
